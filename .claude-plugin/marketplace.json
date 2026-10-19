@@ -1,0 +1,19 @@
+{
+  "name": "kit-ps-agent-skills",
+  "owner": {
+    "name": "KIT Privacy & Security group"
+  },
+  "metadata": {
+    "description": "Agent skills from the KIT Privacy & Security group"
+  },
+  "plugins": [
+    {
+      "name": "paper-review",
+      "description": "Pre-submission review of your own paper draft, with security and privacy checks",
+      "license": "MIT AND Apache-2.0",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/paper-review"]
+    }
+  ]
+}
