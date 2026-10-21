@@ -17,7 +17,7 @@
     },
     {
       "name": "issue-to-merge-request",
-      "description": "Turn a GitLab issue into a tested merge request through a GitLab MCP server, then work through review rounds",
+      "description": "Turn a GitLab issue into a tested merge request through a GitLab MCP server only, then work through review rounds",
       "license": "MIT",
       "source": "./",
       "strict": false,

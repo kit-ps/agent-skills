@@ -5,7 +5,7 @@ Agent skills from the KIT Privacy & Security group.
 | Skill | Description |
 |---|---|
 | [`paper-review`](skills/paper-review/) | Pre-submission review of your own paper draft, with security and privacy checks. |
-| [`issue-to-merge-request`](skills/issue-to-merge-request/) | Turn a GitLab issue into a tested merge request and work through review rounds. Needs the [zereight/gitlab-mcp](https://github.com/zereight/gitlab-mcp) server. |
+| [`issue-to-merge-request`](skills/issue-to-merge-request/) | Turn a GitLab issue into a tested merge request through a GitLab MCP server only (no git), and work through review rounds. Server setup is at the end of the skill. |
 
 ## Install
 
