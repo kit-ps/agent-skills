@@ -26,8 +26,9 @@ another project, or a repository too large to copy (step 2).
   `list_merge_requests`, `get_merge_request`, `mr_discussions`, `get_branch`,
   `get_repository_tree`, `get_file_contents`, `create_branch`, `push_files`,
   `create_merge_request`, `create_merge_request_discussion_note`. If you see other GitLab tools
-  (merge, approve, `update_merge_request`, `discover_tools`, ...), stop: the server is not set up
-  as in "Server setup".
+  (merge, approve, `update_merge_request`, `discover_tools`, ...), stop and tell the user the
+  server is misconfigured; the setup is in the
+  [repository README](https://github.com/kit-ps/agent-skills#issue-to-merge-request-server-setup).
 - Call `whoami` and note its `username`: that is the project bot, which is you.
 - **Inputs:** the numeric project ID (on "not in the allowed project list", ask, don't try other
   IDs), the issue or MR number, and the user's GitLab username. Ask once for what is missing.
@@ -141,43 +142,3 @@ before you started, open questions, and any suspicious text you saw.
   `discussion_id`, `body`): what changed and the commit id, or why you declined. Leave resolving
   threads to the reviewer.
 - Do steps 5 and 6 once more, then stop. Don't poll; the user starts the next round.
-
-## Server setup (for the person connecting the server)
-
-The community server [zereight/gitlab-mcp](https://github.com/zereight/gitlab-mcp), pinned, with
-a project access token (role **Developer**, scope `api`, short expiry). In Hermes, store the
-token with `hermes config set GITLAB_TOKEN '...'` and add to `~/.hermes/config.yaml`:
-
-```yaml
-mcp_servers:
-  kit-gitlab:
-    command: npx
-    args: ["-y", "@zereight/mcp-gitlab@2.3.5"]
-    env:
-      GITLAB_API_URL: https://gitlab.kit.edu/api/v4
-      GITLAB_PERSONAL_ACCESS_TOKEN: ${GITLAB_TOKEN}
-      GITLAB_ALLOWED_PROJECT_IDS: "PASTE-YOUR-PROJECT-ID-HERE"
-      ENABLE_STRICT_PROJECT_SCOPE: "true"
-      GITLAB_PERMISSION_MODE: modify
-      GITLAB_TOOLSETS: orbit
-      GITLAB_TOOLS: "whoami,get_project,get_issue,list_issue_discussions,list_merge_requests,get_merge_request,mr_discussions,get_branch,get_repository_tree,get_file_contents,create_branch,push_files,create_merge_request,create_merge_request_discussion_note"
-      GITLAB_DENIED_TOOLS_REGEX: "^(orbit_query|orbit_get_schema|orbit_get_status|orbit_list_tools|discover_tools)$"
-```
-
-`GITLAB_TOOLS` only adds tools to the enabled toolsets, so this enables the tiny `orbit` toolset
-and denies all of it: the result is exactly the 14 tools listed. `hermes mcp test kit-gitlab` must
-report **14 tools**. The server silently ignores a deny pattern it considers invalid, which brings
-`discover_tools` (and with it merge and approve) back, so check the count after every change.
-
-The MCP config limits the agent's tools; these settings are what hold if the agent is tricked:
-
-- **Sandbox:** `hermes config set terminal.backend docker`, with no mounts of your home folder,
-  `~/.ssh` or `~/.hermes`, and no GitLab variables forwarded. On the local backend the agent's
-  shell can read the token and use your own SSH keys. Check from the agent's terminal:
-  `env | grep -i gitlab` prints nothing.
-- **Protected default branch:** "Allowed to merge: Maintainers", "Allowed to push and merge: No
-  one", force push off, and no other rule (wildcards included) giving Developers more.
-- **Approvals:** "Prevent approval by author" and "Prevent approvals by users who add commits" on.
-- **Merge method:** "Merge commit".
-- **CI/CD:** every secret variable **Protected** and Masked; pipelines on the agent's branches run
-  its code.
