@@ -14,6 +14,14 @@
       "source": "./",
       "strict": false,
       "skills": ["./skills/paper-review"]
+    },
+    {
+      "name": "issue-to-merge-request",
+      "description": "Turn a GitLab issue into a tested merge request through a GitLab MCP server, then work through review rounds",
+      "license": "MIT",
+      "source": "./",
+      "strict": false,
+      "skills": ["./skills/issue-to-merge-request"]
     }
   ]
 }
